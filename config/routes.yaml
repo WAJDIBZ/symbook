@@ -1,0 +1,8 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+afficher_ar:
+    path: /test/ar
+    controller: App\Controller\ProduitController::afficher_ar
