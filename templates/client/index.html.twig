@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des clients
+{% endblock %}
+
+{% block body %}
+	<h1>Liste des clients</h1>
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Adresse</th>
+				<th>Email</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for client in clients %}
+				<tr>
+					<td>{{ client.nom }}</td>
+					<td>{{ client.adresse }}</td>
+					<td>{{ client.email }}</td>
+					<td>
+						<a href="{{ path('app_clients_update', {'id': client.id}) }}" class="btn btn-primary">Modifier</a>
+						<a href="{{ path('app_clients_delete', {'id': client.id}) }}" class="btn btn-danger">Supprimer</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_clients_create') }}" class="btn btn-success">Ajouter un client</a>
+{% endblock %}

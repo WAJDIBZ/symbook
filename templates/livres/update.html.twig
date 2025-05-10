@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier un livre
+{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('bootstrap.min.css') }}">
+
+	<h1>Modifier un livre</h1>
+
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="btn btn-primary">Mettre à jour</button>
+	{{ form_end(form) }}
+
+	<a href="{{ path('app_livres_all') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LivresRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,11 +34,25 @@ class Livres
     #[ORM\Column(length: 255)]
     private ?string $editeur = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $dateEdition = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTime $dateEdition = null;
 
     #[ORM\Column]
     private ?float $prix = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livres')]
+    private ?Categorie $Categorie = null;
+
+    /**
+     * @var Collection<int, ArticleCommande>
+     */
+    #[ORM\OneToMany(targetEntity: ArticleCommande::class, mappedBy: 'livre')]
+    private Collection $articleCommandes;
+
+    public function __construct()
+    {
+        $this->articleCommandes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -115,12 +131,12 @@ class Livres
         return $this;
     }
 
-    public function getDateEdition(): ?string
+    public function getDateEdition(): ?\DateTime
     {
         return $this->dateEdition;
     }
 
-    public function setDateEdition(string $dateEdition): static
+    public function setDateEdition(\DateTime $dateEdition): static
     {
         $this->dateEdition = $dateEdition;
 
@@ -135,6 +151,48 @@ class Livres
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->Categorie;
+    }
+
+    public function setCategorie(?Categorie $Categorie): static
+    {
+        $this->Categorie = $Categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ArticleCommande>
+     */
+    public function getArticleCommandes(): Collection
+    {
+        return $this->articleCommandes;
+    }
+
+    public function addArticleCommande(ArticleCommande $articleCommande): static
+    {
+        if (!$this->articleCommandes->contains($articleCommande)) {
+            $this->articleCommandes->add($articleCommande);
+            $articleCommande->setLivre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleCommande(ArticleCommande $articleCommande): static
+    {
+        if ($this->articleCommandes->removeElement($articleCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($articleCommande->getLivre() === $this) {
+                $articleCommande->setLivre(null);
+            }
+        }
 
         return $this;
     }

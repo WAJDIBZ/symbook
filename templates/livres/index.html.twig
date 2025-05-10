@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des livres
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1>Gestion des livres</h1>
+
+		<p class="lead">Ce module vous permet de gérer le catalogue de livres.</p>
+
+		<div class="mt-4">
+			<a href="{{ path('app_livres_all') }}" class="btn btn-primary">Voir tous les livres</a>
+			<a href="{{ path('app_livres_new') }}" class="btn btn-success">Ajouter un livre</a>
+		</div>
+	</div>
+{% endblock %}

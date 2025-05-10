@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres de la catégorie
+	{{ categorie.nom }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Livres de la catégorie :
+			{{ categorie.nom }}</h1>
+
+		<div class="row mt-4">
+			{% for livre in livres %}
+				<div class="col-md-4 mb-4">
+					<div class="card h-100">
+						{% if livre.image %}
+							<img src="{{ livre.image }}" class="card-img-top" alt="{{ livre.titre }}">
+						{% else %}
+							<img src="https://picsum.photos/200/300" class="card-img-top" alt="Image par défaut">
+						{% endif %}
+						<div class="card-body">
+							<h5 class="card-title">{{ livre.titre }}</h5>
+							<p class="card-text">
+								<strong>Éditeur:</strong>
+								{{ livre.editeur }}<br>
+								<strong>Prix:</strong>
+								{{ livre.prix }}
+								€
+							</p>
+							<a href="{{ path('app_livre_detail', {'slug': livre.slug}) }}" class="btn btn-primary">Détails</a>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div class="col-12">
+					<p>Aucun livre trouvé dans cette catégorie.</p>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="navigation mt-4">
+			{{ knp_pagination_render(livres) }}
+		</div>
+
+		<div class="mt-4">
+			<a href="{{ path('app_livres') }}" class="btn btn-secondary">Retour à la liste des livres</a>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Détails du livre
+{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('bootstrap.min.css') }}">
+
+	<div class="container">
+		<h1>Détails du livre</h1>
+		<table class="table">
+			<tbody>
+				<tr>
+
+					<img src={{livre.image}} class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveaspectratio="xMidYMid slice" viewbox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+					<rect width="100%" height="100%" fill="#868e96"></rect>
+
+
+					<th>Titre</th>
+					<td>{{ livre.titre }}</td>
+				</tr>
+				<tr>
+					<th>Editeur</th>
+					<td>{{ livre.editeur }}</td>
+				</tr>
+				<tr>
+					<th>Date Edition</th>
+					<td>{{ livre.dateEdition|date('d/m/Y') }}</td>
+				</tr>
+				<tr>
+					<th>Prix</th>
+					<td>{{ livre.prix }}</td>
+				</tr>
+
+
+			</tbody>
+		</table>
+
+		<a href="{{ path('app_livres_all') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+	</div>
+{% endblock %}

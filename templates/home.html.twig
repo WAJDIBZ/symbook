@@ -1,249 +1,322 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>{{ name }}
-			Portfolio</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<style>:root
-		{
-			--primary-color: #2ecc71;
-			--secondary-color: #27ae60;
-			--dark-color: #2c3e50;
-			--light-color: #ecf0f1;
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur BookStore - Votre Librairie en Ligne
+{% endblock %}
+
+{% block stylesheets %}
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700 &family=Poppins:wght@300;400;500;600;700&display=swap');
+
+		.font-playfair {
+			font-family: 'Playfair Display', serif;
+		}
+		.font-poppins {
+			font-family: 'Poppins', sans-serif;
 		}
 
-		body {
-			font-family: 'Segoe UI', sans-serif;
-			scroll-behavior: smooth;
+		.book-card {
+			transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+		}
+		.book-card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 		}
 
-		.navbar {
-			background: rgba(44, 62, 80, 0.95);
-			transition: all 0.3s;
+		.category-card {
+			transition: all 0.3s ease;
+		}
+		.category-card:hover {
+			transform: translateY(-5px);
 		}
 
-		.hero-section {
-			height: 100vh;
-			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-			display: flex;
-			align-items: center;
-			color: white;
+		.feature-icon {
+			transition: all 0.3s ease;
 		}
-
-		.project-card {
-			transition: transform 0.3s;
-			border: none;
-			border-radius: 15px;
-			overflow: hidden;
-		}
-
-		.project-card:hover {
-			transform: translateY(-10px);
-			box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-		}
-
-		.skill-badge {
-			background: var(--primary-color);
-			color: white;
-			padding: 8px 15px;
-			border-radius: 20px;
-			margin: 5px;
-		}
-
-		.section-title {
-			font-size: 2.5rem;
-			color: var(--dark-color);
-			position: relative;
-			display: inline-block;
-			margin-bottom: 40px;
-		}
-
-		.section-title::after {
-			content: '';
-			position: absolute;
-			bottom: -10px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 50px;
-			height: 3px;
-			background: var(--primary-color);
-		}
-
-		.contact-section {
-			background: var(--dark-color);
-			color: white;
-		}
-
-		.social-links a {
-			color: white;
-			font-size: 1.5rem;
-			margin: 0 10px;
-			transition: color 0.3s;
-		}
-
-		.social-links a:hover {
-			color: var(--primary-color);
-		}
-
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-				transform: translateY(20px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		.animate-fade-in {
-			animation: fadeIn 1s ease-out;
+		.feature-wrapper:hover .feature-icon {
+			transform: scale(1.1);
 		}
 	</style>
-</head>
-<body>
-	<!-- Navigation -->
-	<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
-		<div class="container">
-			<a class="navbar-brand" href="#">{{ name }}</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav ms-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="#home">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#about">About</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#projects">Projects</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#contact">Contact</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+{% endblock %}
 
-	<!-- Hero Section -->
-	<section class="hero-section" id="home">
-		<div class="container animate-fade-in">
-			<div class="row align-items-center">
-				<div class="col-lg-8">
-					<h1 class="display-1 fw-bold">Hi, I'm
-						{{ name }}</h1>
-					<p class="lead fs-4 mb-4">Full Stack Developer & Symfony Expert</p>
-					<a href="#contact" class="btn btn-light btn-lg px-5 py-3">Hire Me</a>
-				</div>
+{% block body %}
+	<!-- Hero Section avec Carrousel -->
+	<section class="relative bg-gray-900 h-screen max-h-[600px] overflow-hidden">
+		<div id="featuredCarousel" class="carousel slide relative h-full" data-bs-ride="carousel">
+			<div class="carousel-indicators absolute bottom-5 left-0 right-0 flex justify-center space-x-3 z-10">
+				{% for book in featuredBooks %}
+					<button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}bg-white w-8{% else %}bg-gray-400 w-3{% endif %} h-3 rounded-full transition-all duration-300 focus:outline-none" {% if loop.first %} aria-current="true" {% endif %} aria-label="Slide {{ loop.index }}"></button>
+				{% endfor %}
 			</div>
-		</div>
-	</section>
 
-	<!-- About Section -->
-	<section id="about" class="py-5">
-		<div class="container py-5">
-			<h2 class="section-title">About Me</h2>
-			<div class="row">
-				<div class="col-lg-6">
-					<img src="https://via.placeholder.com/400" alt="Profile" class="img-fluid rounded-3">
-				</div>
-				<div class="col-lg-6 mt-4 mt-lg-0">
-					<h3 class="mb-4">Passionate Developer Creating Digital Solutions</h3>
-					<p class="lead">With 5+ years of experience in web development, I specialize in creating robust Symfony applications and modern web experiences.</p>
-					<div class="d-flex flex-wrap mt-4">
-						<span class="skill-badge">PHP</span>
-						<span class="skill-badge">Symfony</span>
-						<span class="skill-badge">JavaScript</span>
-						<span class="skill-badge">MySQL</span>
-						<span class="skill-badge">API Development</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Projects Section -->
-	<section id="projects" class="bg-light py-5">
-		<div class="container py-5">
-			<h2 class="section-title">My Projects</h2>
-			<div class="row g-4">
-				{% for project in projects %}
-					<div class="col-md-4">
-						<div class="project-card">
-							<img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ project.title }}">
-							<div class="card-body">
-								<h5 class="card-title">{{ project.title }}</h5>
-								<p class="card-text">{{ project.description }}</p>
+			<div class="carousel-inner h-full">
+				{% for book in featuredBooks %}
+					<div class="carousel-item {% if loop.first %}active{% endif %} h-full" data-bs-interval="5000">
+						<div class="relative h-full">
+							<img src="{{ book.image }}" class="w-full h-full object-cover" alt="{{ book.titre }}">
+							<div class="absolute inset-0 bg-gradient-to-r from-black to-transparent opacity-80"></div>
+							<div class="absolute top-1/2 transform -translate-y-1/2 left-0 md:left-10 w-full md:w-1/2 text-white p-6 space-y-4">
+								<h1 class="font-playfair text-4xl md:text-5xl font-bold">{{ book.titre }}</h1>
+								<p class="text-gray-300 max-w-lg hidden md:block">
+									{{ book.resume|slice(0, 150) }}
+									{% if book.resume|length > 150 %}...
+									{% endif %}
+								</p>
+								<div class="flex flex-wrap items-center gap-4 pt-2">
+									<span class="bg-amber-400 text-gray-900 font-semibold py-2 px-4 rounded-full">{{ book.prix }}
+										DT</span>
+									<a href="{{ path('app_livres_show', {'id': book.id}) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">Voir le livre</a>
+									<a href="#" class="bg-white text-indigo-600 border border-indigo-600 font-medium py-2 px-6 rounded-full transition duration-300 hover:bg-indigo-50">Ajouter au panier</a>
+								</div>
 							</div>
 						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<button class="carousel-control-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-full p-3 focus:outline-none transition duration-300" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true">
+					<i class="fas fa-chevron-left"></i>
+				</span>
+				<span class="visually-hidden">Précédent</span>
+			</button>
+			<button class="carousel-control-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white rounded-full p-3 focus:outline-none transition duration-300" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true">
+					<i class="fas fa-chevron-right"></i>
+				</span>
+				<span class="visually-hidden">Suivant</span>
+			</button>
+		</div>
+	</section>
+
+	<!-- Section de recherche -->
+	<section class="py-12 bg-white">
+		<div class="container mx-auto px-4">
+			<div class="max-w-3xl mx-auto">
+				<form class="flex items-center p-1 bg-gray-100 rounded-full shadow-md">
+					<input type="search" placeholder="Recherchez un livre, un auteur..." class="w-full px-6 py-4 bg-transparent border-none focus:outline-none text-gray-700" aria-label="Search">
+					<button class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-4 transition duration-300 flex-shrink-0 focus:outline-none transform hover:scale-105" type="submit">
+						<i class="fas fa-search"></i>
+					</button>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<!-- Section des catégories -->
+	<section class="py-16 bg-gray-50">
+		<div class="container mx-auto px-4">
+			<h2 class="text-3xl font-playfair font-bold text-center mb-10">Explorez nos catégories</h2>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+				{% for categorie in categories %}
+					<div class="category-card bg-white rounded-xl shadow-md overflow-hidden group hover:shadow-xl">
+						<div class="h-32 bg-indigo-100 flex items-center justify-center">
+							<i class="fas fa-book text-indigo-600 text-5xl group-hover:scale-110 transition-transform duration-300"></i>
+						</div>
+						<div class="p-6 text-center">
+							<h3 class="text-xl font-semibold mb-2">{{ categorie.libelle }}</h3>
+							<p class="text-gray-600 text-sm mb-4">
+								{{ categorie.description|slice(0, 70) }}
+								{% if categorie.description|length > 70 %}...
+								{% endif %}
+							</p>
+							<a href="{{ path('app_livres_by_category', {'slug': categorie.slug}) }}" class="inline-block text-indigo-600 hover:text-indigo-800 font-medium transition duration-300 py-2 px-4 rounded-lg border border-indigo-200 hover:bg-indigo-50">
+								Découvrir
+							</a>
+						</div>
+					</div>
+				{% else %}
+					<div class="col-span-full">
+						<p class="text-center text-gray-500 py-10">Aucune catégorie disponible pour le moment.</p>
 					</div>
 				{% endfor %}
 			</div>
 		</div>
 	</section>
 
-	<!-- Contact Section -->
-	<section id="contact" class="contact-section py-5">
-		<div class="container py-5">
-			<h2 class="section-title text-white">Get In Touch</h2>
-			<div class="row justify-content-center">
-				<div class="col-md-8">
-					<form>
-						<div class="mb-3">
-							<input type="text" class="form-control form-control-lg" placeholder="Name">
-						</div>
-						<div class="mb-3">
-							<input type="email" class="form-control form-control-lg" placeholder="Email">
-						</div>
-						<div class="mb-3">
-							<textarea class="form-control form-control-lg" rows="5" placeholder="Message"></textarea>
-						</div>
-						<button class="btn btn-outline-light btn-lg w-100">Send Message</button>
-					</form>
-				</div>
+	<!-- Section des nouveautés -->
+	<section class="py-16 bg-white">
+		<div class="container mx-auto px-4">
+			<div class="flex flex-col md:flex-row justify-between items-center mb-10">
+				<h2 class="text-3xl font-playfair font-bold mb-4 md:mb-0">Nos dernières nouveautés</h2>
+				<a href="{{ path('app_login') }}" class="inline-flex items-center px-6 py-3 border border-indigo-600 text-base font-medium rounded-full text-indigo-600 bg-white hover:bg-indigo-50 transition duration-300">
+					Voir tout
+					<i class="fas fa-arrow-right ml-2"></i>
+				</a>
 			</div>
-			<div class="text-center mt-5">
-				<div class="social-links">
-					<a href="#">
-						<i class="fab fa-github"></i>
-					</a>
-					<a href="#">
-						<i class="fab fa-linkedin"></i>
-					</a>
-					<a href="#">
-						<i class="fab fa-twitter"></i>
-					</a>
-					<a href="#">
-						<i class="fab fa-instagram"></i>
-					</a>
+
+			<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+				{% for book in latestBooks %}
+					<div class="book-card rounded-xl overflow-hidden shadow-md bg-white">
+						<div class="relative">
+							<img src="{{ book.image }}" class="w-full h-64 object-cover" alt="{{ book.titre }}">
+							<span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Nouveau</span>
+						</div>
+						<div class="p-5 flex flex-col h-48">
+							<h5 class="font-bold text-lg mb-1 text-gray-800 truncate">{{ book.titre }}</h5>
+							<p class="text-gray-500 text-sm mb-4">{{ book.editeur }}</p>
+							<div class="mt-auto space-y-3">
+								<div class="flex justify-between items-center">
+									<span class="font-bold text-lg text-indigo-600">{{ book.prix }}
+										DT</span>
+									<a href="#" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-lg flex items-center transition duration-300">
+										<i class="fas fa-cart-plus mr-2"></i>
+										Ajouter
+									</a>
+								</div>
+								<a href="{{ path('app_livres_show', {'id': book.id}) }}" class="block text-center py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-300">Détails</a>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="col-span-full">
+						<p class="text-center text-gray-500 py-10">Aucun livre disponible pour le moment.</p>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+
+	<!-- Section Avantages -->
+	<section class="py-16 bg-gray-50">
+		<div class="container mx-auto px-4">
+			<h2 class="text-3xl font-playfair font-bold text-center mb-12">Pourquoi nous choisir ?</h2>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+				<div class="feature-wrapper bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+					<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+						<i class="fas fa-truck feature-icon text-2xl"></i>
+					</div>
+					<h4 class="text-xl font-semibold mb-2">Livraison rapide</h4>
+					<p class="text-gray-600">Livraison en 48h pour toutes vos commandes</p>
+				</div>
+
+				<div class="feature-wrapper bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+					<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+						<i class="fas fa-shield-alt feature-icon text-2xl"></i>
+					</div>
+					<h4 class="text-xl font-semibold mb-2">Paiement sécurisé</h4>
+					<p class="text-gray-600">Transactions sécurisées et multiples options de paiement</p>
+				</div>
+
+				<div class="feature-wrapper bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+					<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+						<i class="fas fa-book-open feature-icon text-2xl"></i>
+					</div>
+					<h4 class="text-xl font-semibold mb-2">Large sélection</h4>
+					<p class="text-gray-600">Des milliers de titres dans toutes les catégories</p>
+				</div>
+
+				<div class="feature-wrapper bg-white p-8 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+					<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+						<i class="fas fa-headset feature-icon text-2xl"></i>
+					</div>
+					<h4 class="text-xl font-semibold mb-2">Service client</h4>
+					<p class="text-gray-600">Une équipe disponible pour répondre à vos questions</p>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// Smooth scroll for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-anchor.addEventListener('click', function (e) {
-e.preventDefault();
-document.querySelector(this.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
-});
-});
+	<!-- Call-to-action Section -->
+	<section class="py-16 bg-indigo-600 text-white">
+		<div class="container mx-auto px-4 text-center">
+			<h2 class="text-3xl font-playfair font-bold mb-4">Rejoignez notre newsletter</h2>
+			<p class="text-indigo-100 mb-8 max-w-2xl mx-auto">Restez informé des dernières sorties et promotions exclusives</p>
 
-// Navbar background change on scroll
-window.addEventListener('scroll', function () {
-if (window.scrollY > 50) {
-document.querySelector('.navbar').style.background = '#2c3e50';
-} else {
-document.querySelector('.navbar').style.background = 'rgba(44, 62, 80, 0.95)';
-}
-});
-	</script>
-</body></html>
+			<form class="max-w-lg mx-auto">
+				<div class="flex flex-col sm:flex-row gap-4">
+					<input type="email" class="flex-grow px-5 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-300 text-gray-800" placeholder="Votre adresse email" aria-label="Email" required>
+					<button class="bg-white text-indigo-600 font-medium px-8 py-3 rounded-full transition duration-300 hover:bg-indigo-50 transform hover:scale-105" type="submit">S'inscrire</button>
+				</div>
+			</form>
+		</div>
+	</section>
+
+<footer class="bg-gray-900 text-white">
+	<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+		<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+			<div class="space-y-4">
+				<h3 class="font-display text-xl font-bold">BookStore</h3>
+				<p class="text-gray-400 text-sm">Votre librairie en ligne de confiance depuis 2024. Découvrez notre sélection de livres pour tous les âges et tous les goûts.</p>
+				<div class="flex space-x-4">
+					<a href="#" class="text-gray-400 hover:text-white">
+						<i class="fab fa-facebook-f"></i>
+					</a>
+					<a href="#" class="text-gray-400 hover:text-white">
+						<i class="fab fa-twitter"></i>
+					</a>
+					<a href="#" class="text-gray-400 hover:text-white">
+						<i class="fab fa-instagram"></i>
+					</a>
+					<a href="#" class="text-gray-400 hover:text-white">
+						<i class="fab fa-youtube"></i>
+					</a>
+				</div>
+			</div>
+
+			<div>
+				<h3 class="text-lg font-medium mb-4">Navigation</h3>
+				<ul class="space-y-2 text-gray-400">
+					<li>
+						<a href="{{ path('home') }}" class="hover:text-white transition">Accueil</a>
+					</li>
+					<li>
+						<a href="{{ path('app_livres_all') }}" class="hover:text-white transition">Nos livres</a>
+					</li>
+					<li>
+						<a href="{{ path('app_categories') }}" class="hover:text-white transition">Catégories</a>
+					</li>
+					<li>
+						<a href="#" class="hover:text-white transition">À propos</a>
+					</li>
+					<li>
+						<a href="#" class="hover:text-white transition">Contact</a>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="text-lg font-medium mb-4">Informations</h3>
+				<ul class="space-y-2 text-gray-400">
+					<li>
+						<a href="#" class="hover:text-white transition">Conditions générales</a>
+					</li>
+					<li>
+						<a href="#" class="hover:text-white transition">Politique de confidentialité</a>
+					</li>
+					<li>
+						<a href="#" class="hover:text-white transition">Livraison et retours</a>
+					</li>
+					<li>
+						<a href="#" class="hover:text-white transition">FAQ</a>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="text-lg font-medium mb-4">Newsletter</h3>
+				<p class="text-gray-400 text-sm mb-4">Inscrivez-vous pour recevoir nos offres exclusives</p>
+				<form class="flex">
+					<input type="email" class="flex-grow px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Votre email">
+					<button class="bg-yellow-400 text-indigo-900 px-4 py-2 rounded-r-md hover:bg-yellow-300 transition">
+						<i class="fas fa-paper-plane"></i>
+					</button>
+				</form>
+			</div>
+
+			<div class="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
+				<p class="text-gray-400 text-sm">&copy; 2024 BookStore. Tous droits réservés.</p>
+				<div class="flex space-x-4 mt-4 md:mt-0">
+					<i class="fas fa-lock text-gray-400 text-xl" title="Paiement sécurisé"></i>
+					<i class="fab fa-cc-visa text-gray-400 text-xl" title="Visa"></i>
+					<i class="fab fa-cc-mastercard text-gray-400 text-xl" title="Mastercard"></i>
+					<i class="fab fa-cc-paypal text-gray-400 text-xl" title="PayPal"></i>
+				</div>
+			</div>
+	</div>
+</footer>
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion
+{% endblock %}
+
+{% block body %}
+	<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+		<div
+			class="max-w-md w-full">
+			<!-- Logo/Branding -->
+			<div class="text-center mb-8">
+				<h2 class="font-display text-3xl font-bold text-gray-900">
+					BookStore
+				</h2>
+				<p class="mt-2 text-sm text-gray-600">
+					Accédez à votre compte pour découvrir notre sélection
+				</p>
+			</div>
+
+			<!-- Card -->
+			<div
+				class="bg-white rounded-xl shadow-xl overflow-hidden">
+				<!-- Card Header -->
+				<div class="px-6 py-4 bg-gradient-to-r from-indigo-800 to-purple-700">
+					<h3 class="text-xl font-medium text-white">Connexion</h3>
+				</div>
+
+				<!-- Card Body -->
+				<div class="px-6 py-6">
+					{% if error %}
+						<div class="mb-4 rounded-md bg-red-50 p-4 border border-red-200">
+							<div class="flex">
+								<div class="flex-shrink-0">
+									<i class="fas fa-exclamation-circle text-red-400"></i>
+								</div>
+								<div class="ml-3">
+									<p class="text-sm font-medium text-red-800">
+										{{ error.messageKey|trans(error.messageData, 'security') }}
+									</p>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
+					<form method="post">
+						{% if app.user %}
+							<div class="mb-4 rounded-md bg-blue-50 p-4 border border-blue-200">
+								<div class="flex">
+									<div class="flex-shrink-0">
+										<i class="fas fa-info-circle text-blue-400"></i>
+									</div>
+									<div class="ml-3">
+										<p class="text-sm font-medium text-blue-800">
+											Vous êtes connecté en tant que
+											{{ app.user.userIdentifier }},
+											<a href="{{ path('app_logout') }}" class="font-semibold underline hover:text-indigo-700">Se déconnecter</a>
+										</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						<div
+							class="space-y-5">
+							<!-- Email Field -->
+							<div>
+								<label for="inputEmail" class="block text-sm font-medium text-gray-700">Email</label>
+								<div class="mt-1 relative rounded-md shadow-sm">
+									<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+										<i class="fas fa-envelope text-gray-400"></i>
+									</div>
+									<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" autocomplete="email" required autofocus placeholder="votre@email.com">
+								</div>
+							</div>
+
+							<!-- Password Field -->
+							<div>
+								<div class="flex items-center justify-between">
+									<label for="inputPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+									<a href="#" class="text-xs font-medium text-indigo-600 hover:text-indigo-500">
+										Mot de passe oublié?
+									</a>
+								</div>
+								<div class="mt-1 relative rounded-md shadow-sm">
+									<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+										<i class="fas fa-lock text-gray-400"></i>
+									</div>
+									<input type="password" name="password" id="inputPassword" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" autocomplete="current-password" required placeholder="••••••••">
+								</div>
+							</div>
+
+							<!-- CSRF Token -->
+							<input
+							type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+							<!-- Remember Me -->
+							<div class="flex items-center">
+								<input type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" id="rememberMe" name="_remember_me">
+								<label class="ml-2 block text-sm text-gray-700" for="rememberMe">
+									Se souvenir de moi
+								</label>
+							</div>
+
+							<!-- Submit Button -->
+							<div>
+								<button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+									<i class="fas fa-sign-in-alt mr-2"></i>
+									Se connecter
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!-- Card Footer -->
+				<div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center">
+					<p class="text-sm text-gray-600">
+						Vous n'avez pas de compte?
+						<a href="{{ path('app_register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+							Créer un compte
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<!-- Additional Options -->
+			<div class="mt-6">
+				<div class="relative">
+					<div class="absolute inset-0 flex items-center">
+						<div class="w-full border-t border-gray-300"></div>
+					</div>
+					<div class="relative flex justify-center text-sm">
+						<span class="px-2 bg-gray-50 text-gray-500">
+							Ou continuez avec
+						</span>
+					</div>
+				</div>
+
+				<div class="mt-6 grid grid-cols-3 gap-3">
+					<div>
+						<a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+							<i class="fab fa-google"></i>
+						</a>
+					</div>
+					<div>
+						<a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+							<i class="fab fa-facebook-f"></i>
+						</a>
+					</div>
+					<div>
+						<a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+							<i class="fab fa-apple"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+{% if error and error.messageKey == 'Invalid credentials.' %}
+Swal.fire({icon: 'error', title: 'Erreur', text: 'Identifiants invalides. Veuillez réessayer.'});
+{% elseif error %}
+Swal.fire({icon: 'error', title: 'Erreur', text: '{{ error.messageKey|trans(error.messageData, 'security') }}'});
+{% elseif app.user %}
+Swal.fire({icon: 'success', title: 'Succès', text: 'Connexion réussie en tant que  {{ app.user.userIdentifier }}.'});{% endif %}
+});
+	</script>
+{% endblock %}
